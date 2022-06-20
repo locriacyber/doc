@@ -273,6 +273,7 @@ my &newfunc = nativecast(:(Str, size_t --> int32), $fptr);
 say newfunc("test", 4);
 =end code
 
+X<|Types,CArray>
 =head1 Arrays
 
 NativeCall has some support for arrays. It is constrained to work with machine-size
@@ -353,7 +354,18 @@ and you will get a segfault or cause memory corruption. This isn't a shortcoming
 of C<NativeCall>, it's the way the big bad native world works. Scared? Here,
 have a hug. Good luck!
 
-X<|Types,CArray>
+X<|Reference,Fixed sized array and Array pointer (CArray)>
+=head2 Fixed sized array and Array pointer
+
+When embedding an array in struct, use C<HAS>. Otherwise, the C<CArray> is a pointer.
+
+=begin code :preamble<use NativeCall>
+class ArrayInStruct is repr('CStruct') {
+    has CArray[int32] $.i_am_pointer;      # int * in C
+    HAS int32 @.i_am_inlined[3] is CArray; # int[3] in C
+}
+=end code
+
 X<|Reference,CArray methods>
 =head2 CArray methods
 
